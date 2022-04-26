@@ -1,21 +1,24 @@
-import axios from 'axios'
-import appConfig from '../config/app.js';  
+import axios from "axios";
+import appConfig from "../config/app.js";
 
 export default class GetMembers {
   constructor(token) {
-    this.token = token
+    this.token = token;
   }
   async execute({ groupId }) {
     try {
-
-        const res = await axios.get(`${appConfig.keycloak.origin.host}/auth/admin/realms/vpm/groups/${groupId}/members`, {
-            headers: {
-                'Authorization': `Bearer ${this.token}`
-            }
-        });
-        return res.data;
+      const { host, realm } = appConfig.keycloak.origin;
+      const res = await axios.get(
+        `${host}/auth/admin/realms/${realm}/groups/${groupId}/members`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        }
+      );
+      return res.data;
     } catch (error) {
-        console.log('[GROUPS-MEMBERS]', error)
+      console.log("[GROUPS-MEMBERS]", error);
     }
-}
+  }
 }
